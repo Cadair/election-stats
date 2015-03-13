@@ -17,8 +17,8 @@ from app import db
 class Constituency(db.Model):
     __tablename__ = "Constituency"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), unique=True)
-    boundary = db.Column(db.String(1e5), unique=True)
+    name = db.Column(db.String(120))
+    boundary = db.Column(db.String(1e8))
     children = db.relationship("Results")
 
     def __init__(self, name):
