@@ -2,11 +2,17 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, send_from_directory
 from flask.ext.sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
 from forms import *
+
+import folium
+import numpy as np
+import json
+import tempfile
+import requests
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -37,11 +43,54 @@ def login_required(test):
 # Controllers.
 #----------------------------------------------------------------------------#
 
+def postcode_search(postcode):
+    key = app.config['THEYWORKFORYOUAPI']
+    con_url='http://www.theyworkforyou.com/api/getConstituency?postcode={}&key={}'.format(postcode,key)
+    mp_url='http://www.theyworkforyou.com/api/getMP?postcode={}&key={}'.format(postcode,key)
+    r_con = requests.get(con_url)
+    r_mp = requests.get(mp_url)
+    con = r_con.json()['name']
+    mp = r_mp.json()['full_name']
+    return con, mp
 
-@app.route('/')
+def build_map(con):
+    json_data=open('./ETPHONEHOME/boundaries/{}.json'.format(con))
+    data = json.load(json_data)
+    lat = np.zeros(1)
+    lon = np.zeros(1)
+    length = len(data['geometry']['coordinates'][0])
+    for i in data['geometry']['coordinates'][0]:
+        lon = lon+i[0]
+        lat = lat+i[1]
+    lat /= length
+    lon /= length
+    lat = lat[0]
+    lon = lon[0]
+
+    map = folium.Map(location=[lat,lon],zoom_start=10)
+    map.geo_json(geo_path='../ETPHONEHOME/boundaries/{}.json'.format(con))
+    map.create_map(path="tmp/test.html")
+    return map
+
+
+@app.route('/', methods=['POST', 'GET'])
 def home():
-    return render_template('pages/placeholder.home.html')
+    form = PostCodeForm()
+    if request.method == 'POST':
+        if form.postcode.data:
+            con, mp = postcode_search(form.postcode.data)
+            flash("You searched for postcode {},\n In the {} constituency,\n and currently has the MP {}.".format(form.postcode.data, con , mp))
+            map = build_map(con)
+            return render_template('pages/placeholder.home.html', form=form, fmap="tmp/test.html")
+    return render_template('pages/placeholder.home.html', form=form)
 
+@app.route('/ETPHONEHOME/<path:path>')
+def files1(path):
+    return send_from_directory('ETPHONEHOME', path)
+
+@app.route('/tmp/<path:path>')
+def files2(path):
+    return send_from_directory('tmp', path)
 
 @app.route('/about')
 def about():

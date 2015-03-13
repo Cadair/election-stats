@@ -12,3 +12,6 @@ paramiko==1.12.2
 pycrypto==2.6.1
 wsgiref==0.1.2
 Flask-WTF==0.9.4
+requests
+folium
+numpy
