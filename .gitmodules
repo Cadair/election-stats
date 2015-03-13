@@ -1,0 +1,3 @@
+[submodule "ETPHONEHOME"]
+	path = ETPHONEHOME
+	url = https://github.com/nabobalis/ETPHONEHOME.git
