@@ -83,8 +83,8 @@ def home():
             con, mp = postcode_search(form.postcode.data)
             flash("You searched for postcode {},\n In the {} constituency,\n and currently has the MP {}.".format(form.postcode.data, con , mp))
             map = build_map(con)
-            return render_template('pages/home_geojson.html', form=form, **map.template_vars)
-    return render_template('pages/placeholder.home.html', form=form)
+            return render_template('pages/geojson_map.html', form=form, **map.template_vars)
+    return render_template('pages/home.html', form=form)
 
 @app.route('/election_json/<path:path>')
 def files1(path):
@@ -96,7 +96,7 @@ def files2(path):
 
 @app.route('/about')
 def about():
-    return render_template('pages/placeholder.about.html')
+    return render_template('pages/about.html')
 
 # Error handlers.
 
