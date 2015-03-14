@@ -3,3 +3,4 @@
 env
 venv
 flask-env
+.ipynb_checkpoints/*

@@ -54,7 +54,7 @@ def postcode_search(postcode):
     return con, mp
 
 def build_map(con):
-    json_data=open('./ETPHONEHOME/boundaries/{}.json'.format(con))
+    json_data=open('./election_json/boundaries/{}.json'.format(con))
     data = json.load(json_data)
     lat = np.zeros(1)
     lon = np.zeros(1)
@@ -68,8 +68,10 @@ def build_map(con):
     lon = lon[0]
 
     map = folium.Map(location=[lat,lon],zoom_start=10)
-    map.geo_json(geo_path='../ETPHONEHOME/boundaries/{}.json'.format(con))
-    map.create_map(path="tmp/test.html")
+    map.geo_json(geo_path='/election_json/boundaries/{}.json'.format(con))
+    # map.create_map(path="tmp/test_ori.html")
+    # map.env = app.jinja_env
+    # map.create_map(path="tmp/test_flask.html")
     return map
 
 
@@ -81,12 +83,12 @@ def home():
             con, mp = postcode_search(form.postcode.data)
             flash("You searched for postcode {},\n In the {} constituency,\n and currently has the MP {}.".format(form.postcode.data, con , mp))
             map = build_map(con)
-            return render_template('pages/placeholder.home.html', form=form, fmap="tmp/test.html")
+            return render_template('pages/home_geojson.html', form=form, **map.template_vars)
     return render_template('pages/placeholder.home.html', form=form)
 
-@app.route('/ETPHONEHOME/<path:path>')
+@app.route('/election_json/<path:path>')
 def files1(path):
-    return send_from_directory('ETPHONEHOME', path)
+    return send_from_directory('election_json', path)
 
 @app.route('/tmp/<path:path>')
 def files2(path):
