@@ -3,17 +3,28 @@
 {% block content %}
 
 <div class="page-header">
-  <h1>Election 2015 - All the Stats!</h1>
+    <h1>Election 2015</h1>
 </div>
 
-<form action="" method="post" name="postcode">
-    {{ form.postcode }}
-    <input type="submit" value="Search">
+<h3> Enter your postcode to begin:</h3>
+<form action="" method="post" name="postcode" class="form-inline">
+  <div class="form-group" style="width:90%">
+    {{ form.postcode(class_="form-control") }} 
+  </div>
+  <input type="submit"  class="btn btn-default" value="Search">
 </form>
 
+{% if con is defined %}
+<div class="conresult">
+<h3> {{ con.con }} </h3>
 <div class="map">
 {% block map %}
 {% endblock %}
 </div>
-
+<div class="con">
+    <h4>MP:</h4>
+    <span class=mpname>{{ con.mp }}<span>
+</div>
+</div>
+{% endif %}
 {% endblock %}

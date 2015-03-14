@@ -32,5 +32,17 @@ a {
 /*****************************************************************************
  * Various other styles
  ****************************************************************************/
+.conresult {
+    margin-top:2em;
+}
+.map {
+    padding: 0.5em;
+    width: 70%;
+    float: left;
+}
 
+.con {
+    width: 29%;
+    float: right;
+}
 /* Various other styles end */
