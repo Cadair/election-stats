@@ -47,12 +47,15 @@ def build_map(con):
     data = json.load(json_data)
     lat = np.zeros(1)
     lon = np.zeros(1)
-    length = len(data['geometry']['coordinates'][0])
-    for i in data['geometry']['coordinates'][0]:
+    if len(data['geometry']['coordinates']) > 1:
+        loop_data = data['geometry']['coordinates'][0][0]
+    else:
+        loop_data = data['geometry']['coordinates'][0]
+    for i in loop_data:
         lon = lon+i[0]
         lat = lat+i[1]
-    lat /= length
-    lon /= length
+    lat /= len(loop_data)
+    lon /= len(loop_data)
     lat = lat[0]
     lon = lon[0]
 
