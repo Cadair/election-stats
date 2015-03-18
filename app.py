@@ -43,7 +43,7 @@ def postcode_search(postcode):
 
 
 def build_map(con):
-    json_data=open('./election_json/boundaries/{}.json'.format(con))
+    json_data=open('./boundaries/{}.json'.format(con))
     data = json.load(json_data)
     lat = np.zeros(1)
     lon = np.zeros(1)
@@ -60,7 +60,7 @@ def build_map(con):
     lon = lon[0]
 
     map = folium.Map(location=[lat,lon],zoom_start=10, width='100%')
-    map.geo_json(geo_path='/election_json/boundaries/{}.json'.format(con))
+    map.geo_json(geo_path='/boundaries/{}.json'.format(con))
     # map.create_map(path="tmp/test_ori.html")
     # map.env = app.jinja_env
     # map.create_map(path="tmp/test_flask.html")
@@ -80,9 +80,9 @@ def home():
     return render_template('pages/home.html', form=form)
 
 
-@app.route('/election_json/<path:path>')
+@app.route('/<path:path>')
 def boundary_json(path):
-    return send_from_directory('election_json', path)
+    return send_from_directory('/boundaries/', path)
 
 
 @app.route('/about')
