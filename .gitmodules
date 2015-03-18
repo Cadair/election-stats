@@ -1,3 +1,0 @@
-[submodule "election_json"]
-	path = election_json
-	url = https://github.com/nabobalis/election_json.git
