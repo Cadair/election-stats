@@ -16,8 +16,7 @@ class Results(db.Model):
     __tablename__ = "Results"
     id = db.Column(db.Integer, primary_key=True)
     constituency_id = db.Column(db.Integer, db.ForeignKey('Constituency.id'))
-    turnout = db.Column(db.Integer) # Percentage turnout
-    numvotes = db.Column(db.Integer) # Total turnout
+    turnout = db.Column(db.Float(precision=3)) # Percentage turnout
     year = db.Column(db.Date) # Date of this election
     children = db.relationship("Candidates")
 
@@ -26,14 +25,13 @@ class Candidates(db.Model):
     __tablename__ = "Candidates"
     id = db.Column(db.Integer, primary_key=True)
     results_id = db.Column(db.Integer, db.ForeignKey('Results.id'))
-    share = db.Column(db.Integer) # Share of vote.
+    share = db.Column(db.Float(precision=3)) # Share of vote.
     MPname = db.Column(db.String(120)) # Name
     MPparty = db.Column(db.Integer, db.ForeignKey('Party.id')) # Party
     child = db.relationship("Party")
     numvotes = db.Column(db.Integer) # Total numver of votes for this person
-    year = db.Column(db.Date) # Date of this election
 
-
+    
 class Party(db.Model): # To be expanded on later I feel.
     __tablename__ = "Party"
     id = db.Column(db.Integer, primary_key=True)
